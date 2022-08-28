@@ -21,9 +21,11 @@ public class Employee {
     private String name;
 
     @ElementCollection
+    @Column(name = "skill")
     private Set<EmployeeSkill> skills;
 
     @ElementCollection
+    @Column(name = "dateAvailable")
     private Set<DayOfWeek> daysAvailable;
 
 

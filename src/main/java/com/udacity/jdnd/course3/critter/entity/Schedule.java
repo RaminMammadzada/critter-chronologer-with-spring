@@ -33,6 +33,7 @@ public class Schedule {
     private List<Pet> pets;
 
     @ElementCollection
+    @Column(name = "activity")
     private Set<EmployeeSkill> activities;
 
     public Schedule() {

@@ -22,7 +22,7 @@ public class Pet {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Customer customer;
 
-    @Column(name = "birthDate", nullable = false)
+    @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
     @Column(name = "notes", nullable = false)
