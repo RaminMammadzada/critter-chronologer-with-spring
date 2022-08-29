@@ -43,7 +43,20 @@ public class UserController {
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
-        return customerService.getAllCustomerDTOs();
+        List<CustomerDTO> customerDTOS = new ArrayList<CustomerDTO>();
+        for (Customer c : customerService.getAllCustomers()) {
+            CustomerDTO customerDTO = modelMapper.map(c, CustomerDTO.class);
+            List<Pet> pets = c.getPets();
+            List<Long> petIds = new ArrayList<Long>();
+            if(pets != null) {
+                for (Pet p : pets) {
+                    petIds.add(p.getId());
+                }
+            }
+            customerDTO.setPetIds(petIds);
+            customerDTOS.add(customerDTO);
+        }
+        return customerDTOS;
     }
 
     @GetMapping("/customer/pet/{petId}")

@@ -21,28 +21,12 @@ public class CustomerService {
     ModelMapper modelMapper;
 
     public Customer createCustomer(Customer customer) {
+        customer.setPets(new ArrayList<Pet>());
         return customerRepository.save(customer);
     }
 
     public List<Customer> getAllCustomers() {
         return (List<Customer>) customerRepository.findAll();
-    }
-
-    public List<CustomerDTO> getAllCustomerDTOs() {
-        List<CustomerDTO> customerDTOS = new ArrayList<CustomerDTO>();
-        for (Customer c : this.getAllCustomers()) {
-            CustomerDTO customerDTO = modelMapper.map(c, CustomerDTO.class);
-            List<Pet> pets = c.getPets();
-            List<Long> petIds = new ArrayList<Long>();
-            if(pets != null) {
-                for (Pet p : pets) {
-                    petIds.add(p.getId());
-                }
-            }
-            customerDTO.setPetIds(petIds);
-            customerDTOS.add(customerDTO);
-        }
-        return customerDTOS;
     }
 
     public Optional<Customer> getCustomerById(Long customerId) {
