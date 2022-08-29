@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.user;
 import com.udacity.jdnd.course3.critter.entity.Customer;
 import com.udacity.jdnd.course3.critter.entity.Employee;
 import com.udacity.jdnd.course3.critter.entity.Pet;
+import com.udacity.jdnd.course3.critter.exception.EmployeeNotFoundException;
 import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
 import com.udacity.jdnd.course3.critter.service.CustomerService;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
@@ -78,9 +79,10 @@ public class UserController {
         return modelMapper.map(createdEmployee, EmployeeDTO.class);
     }
 
-    @PostMapping("/employee/{employeeId}")
+    @GetMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        Employee retrievedEmployee = employeeService.getEmployee(employeeId).orElseThrow(() -> new EmployeeNotFoundException("ID: " + employeeId));
+        return modelMapper.map(retrievedEmployee, EmployeeDTO.class);
     }
 
     @PutMapping("/employee/{employeeId}")
