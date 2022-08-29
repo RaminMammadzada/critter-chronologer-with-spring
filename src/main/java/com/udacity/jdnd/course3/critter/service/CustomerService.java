@@ -17,9 +17,6 @@ public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
 
-    @Autowired
-    ModelMapper modelMapper;
-
     public Customer createCustomer(Customer customer) {
         customer.setPets(new ArrayList<Pet>());
         return customerRepository.save(customer);

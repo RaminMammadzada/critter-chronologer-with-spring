@@ -1,9 +1,11 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.entity.Customer;
+import com.udacity.jdnd.course3.critter.entity.Employee;
 import com.udacity.jdnd.course3.critter.entity.Pet;
 import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
 import com.udacity.jdnd.course3.critter.service.CustomerService;
+import com.udacity.jdnd.course3.critter.service.EmployeeService;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class UserController {
     CustomerService customerService;
 
     @Autowired
+    EmployeeService employeeService;
+
+    @Autowired
     PetService petService;
 
     @Autowired
@@ -36,8 +41,8 @@ public class UserController {
 
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
-        Customer customer = modelMapper.map(customerDTO, Customer.class);
-        Customer createdCustomer = customerService.createCustomer(customer);
+        Customer mappedCustomer = modelMapper.map(customerDTO, Customer.class);
+        Customer createdCustomer = customerService.createCustomer(mappedCustomer);
         return modelMapper.map(createdCustomer, CustomerDTO.class);
     }
 
@@ -68,7 +73,9 @@ public class UserController {
 
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        Employee mappedEmployee = modelMapper.map(employeeDTO, Employee.class);
+        Employee createdEmployee = employeeService.createEmployee(mappedEmployee);
+        return modelMapper.map(createdEmployee, EmployeeDTO.class);
     }
 
     @PostMapping("/employee/{employeeId}")
