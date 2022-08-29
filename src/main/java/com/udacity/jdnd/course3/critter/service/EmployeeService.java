@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -34,7 +36,9 @@ public class EmployeeService {
     }
 
     public List<Employee> getAllAvailableEmployees(LocalDate date, Set<EmployeeSkill> skills) {
-        return employeeRepository.findDistinctBySkillsInAndDaysAvailableContains(skills, date.getDayOfWeek());
+        List<Employee> employeesContainingTheDate = employeeRepository.findDistinctByDaysAvailableContains(date.getDayOfWeek());
+        List<Employee> filteredEmployed = new ArrayList<>();
+        return employeesContainingTheDate.stream().filter(employee -> employee.getSkills().containsAll(skills)).collect(Collectors.toList());
     }
 
     public List<Employee> getAllEmployees() {
