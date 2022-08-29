@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.user;
 import com.udacity.jdnd.course3.critter.entity.Customer;
 import com.udacity.jdnd.course3.critter.entity.Employee;
 import com.udacity.jdnd.course3.critter.entity.Pet;
+import com.udacity.jdnd.course3.critter.exception.CustomerNotFoundException;
 import com.udacity.jdnd.course3.critter.exception.EmployeeNotFoundException;
 import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
 import com.udacity.jdnd.course3.critter.service.CustomerService;
@@ -68,8 +69,17 @@ public class UserController {
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
         Pet pet = petService.getPet(petId).orElseThrow(() -> new PetNotFoundException("ID: " + petId));
-        Optional<Customer> customer = customerService.getCustomerById(pet.getCustomer().getId());
-        return modelMapper.map(customer, CustomerDTO.class);
+        Long ownerId = pet.getCustomer().getId();
+        Customer customer = customerService.getCustomerById(ownerId).orElseThrow(() -> new CustomerNotFoundException("ID: " + ownerId));;
+        CustomerDTO customerDTO = modelMapper.map(customer, CustomerDTO.class);
+
+        List<Long> petIds = new ArrayList<>();
+        for (Pet p : customer.getPets()) {
+            petIds.add(p.getId());
+        }
+        customerDTO.setPetIds(petIds);
+
+        return customerDTO;
     }
 
     @PostMapping("/employee")

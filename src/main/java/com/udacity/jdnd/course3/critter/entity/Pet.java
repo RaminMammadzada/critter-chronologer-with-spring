@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "type", nullable = false)
@@ -23,10 +23,10 @@ public class Pet {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Customer customer;
 
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @Column(name = "notes", nullable = false)
+    @Column(name = "notes")
     private String notes;
 
     public Pet() {

@@ -7,6 +7,7 @@ import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,15 @@ public class PetService {
         Customer customer = customerService.getCustomerById(ownerId).orElseThrow(() -> new CustomerNotFoundException("ID: " + ownerId));
         pet.setCustomer(customer);
         pet = petRepository.save(pet);
+
+        List<Pet> customerPets = customer.getPets();
+        if(customerPets != null) {
+            customerPets.add(pet);
+        } else {
+            customerPets = new ArrayList<>();
+        }
+        customer.setPets(customerPets);
+
         return pet;
     }
 

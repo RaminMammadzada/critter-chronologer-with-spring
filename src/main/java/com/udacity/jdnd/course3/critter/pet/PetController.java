@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.pet;
 
 import com.udacity.jdnd.course3.critter.entity.Pet;
+import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
 import com.udacity.jdnd.course3.critter.service.CustomerService;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import org.modelmapper.ModelMapper;
@@ -34,13 +35,15 @@ public class PetController {
         PetDTO mappedPet = modelMapper.map(createdPet, PetDTO.class);
         mappedPet.setOwnerId(createdPet.getCustomer().getId());
         return mappedPet;
-
     }
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        Optional<Pet> retrievedPet = petService.getPet(petId);
-        return modelMapper.map(retrievedPet, PetDTO.class);
+        Pet retrievedPet = petService.getPet(petId).orElseThrow(() -> new PetNotFoundException("ID: " + petId));;
+        PetDTO petDTO = modelMapper.map(retrievedPet, PetDTO.class);
+        Long ownerId = retrievedPet.getCustomer().getId();
+        petDTO.setOwnerId(ownerId);
+        return petDTO;
     }
 
     @GetMapping
