@@ -10,7 +10,8 @@ import java.util.Set;
 @Entity
 public class Schedule {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "date", nullable = false)

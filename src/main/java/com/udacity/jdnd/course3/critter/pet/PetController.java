@@ -50,7 +50,9 @@ public class PetController {
     public List<PetDTO> getPets(){
         List<PetDTO> petDTOS = new ArrayList<PetDTO>();
         for (Pet p : petService.getAllPets()) {
-            petDTOS.add(modelMapper.map(p, PetDTO.class));
+            PetDTO petDTO = modelMapper.map(p, PetDTO.class);
+            petDTO.setOwnerId(p.getCustomer().getId());
+            petDTOS.add(petDTO);
         }
         return petDTOS;
     }
