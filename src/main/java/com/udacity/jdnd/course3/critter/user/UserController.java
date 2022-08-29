@@ -1,9 +1,18 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.entity.Customer;
+import com.udacity.jdnd.course3.critter.entity.Pet;
+import com.udacity.jdnd.course3.critter.exception.PetNotFoundException;
+import com.udacity.jdnd.course3.critter.service.CustomerService;
+import com.udacity.jdnd.course3.critter.service.PetService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -16,19 +25,32 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    CustomerService customerService;
+
+    @Autowired
+    PetService petService;
+
+    @Autowired
+    ModelMapper modelMapper;
+
     @PostMapping("/customer")
-    public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        throw new UnsupportedOperationException();
+    public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
+        Customer customer = modelMapper.map(customerDTO, Customer.class);
+        Customer createdCustomer = customerService.createCustomer(customer);
+        return modelMapper.map(createdCustomer, CustomerDTO.class);
     }
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
-        throw new UnsupportedOperationException();
+        return customerService.getAllCustomerDTOs();
     }
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+        Pet pet = petService.getPet(petId).orElseThrow(() -> new PetNotFoundException("ID: " + petId));
+        Optional<Customer> customer = customerService.getCustomerById(pet.getCustomer().getId());
+        return modelMapper.map(customer, CustomerDTO.class);
     }
 
     @PostMapping("/employee")

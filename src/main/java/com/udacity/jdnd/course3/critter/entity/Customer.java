@@ -19,7 +19,7 @@ public class Customer {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "notes", nullable = false)
+    @Column(name = "notes")
     private String notes;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
