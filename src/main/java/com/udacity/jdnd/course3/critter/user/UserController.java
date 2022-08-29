@@ -79,6 +79,17 @@ public class UserController {
         return modelMapper.map(createdEmployee, EmployeeDTO.class);
     }
 
+    @GetMapping("/employee")
+    public List<EmployeeDTO> getAllEmployees(){
+        List<EmployeeDTO> employeeDTOS = new ArrayList<EmployeeDTO>();
+        for (Employee e: employeeService.getAllEmployees()) {
+            EmployeeDTO employeeDTO = modelMapper.map(e, EmployeeDTO.class);
+            employeeDTOS.add(employeeDTO);
+        }
+        return employeeDTOS;
+    }
+
+
     @GetMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
         Employee retrievedEmployee = employeeService.getEmployee(employeeId).orElseThrow(() -> new EmployeeNotFoundException("ID: " + employeeId));
@@ -91,8 +102,16 @@ public class UserController {
     }
 
     @GetMapping("/employee/availability")
-    public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+    public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
+        List<Employee> employees = employeeService.getAllAvailableEmployees(employeeRequestDTO.getDate(), employeeRequestDTO.getSkills());
+
+        List<EmployeeDTO> employeeDTOs = new ArrayList<EmployeeDTO>();
+        for (Employee e : employees) {
+            EmployeeDTO employeeDTO = modelMapper.map(e, EmployeeDTO.class);
+            employeeDTOs.add(employeeDTO);
+        }
+
+        return employeeDTOs;
     }
 
 }
